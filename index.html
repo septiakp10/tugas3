@@ -1,0 +1,221 @@
+<!-- saya mengerjakan tugas ini sendiri tanpa melakukan kecurangan seperti menggunakan, mendupliaksi kode perogram kode program yang ada. jia saya melakukan kecurangan dalam perngerjaan tugas ini maka saya siap menerima sanksi atau hukuman dari dari dosen mata kuliah dan tuhan / allah  swt -->
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas3-162023042</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="mainBody">
+    <div class="card" id="mainCard">
+        <div class="card-header">
+            <h1># Preferensi Warna</h1>
+        </div>
+        
+        <div class="card-body" id="cardBody">
+            <div class="warna-title" id="warnaTitle">Warna</div>
+            <div id="warnaListContainer" class="warna-list"></div>
+            <button class="btn-simpan" id="simpanBtn">Simpan</button>
+        </div>
+    </div>
+    <div class="modal" id="colorModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-btn btn-cancel" id="cancelBtn">Cancel</button>
+                <h2>Choose a color</h2>
+                <button class="modal-btn btn-select" id="selectBtn">Select</button>
+            </div>
+            
+            <div class="color-grid" id="colorGrid"></div>
+            
+            <div class="custom-section">Custom</div>
+            
+            <div class="color-input-wrapper">
+                <input type="color" id="colorPicker" value="#ffffff">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let bgColor = '#ffffff';
+        let textColor = '#000000';
+        let isSaved = false;
+        let activeType = 'bg';
+        const mainBody = document.getElementById('mainBody');
+        const mainCard = document.getElementById('mainCard');
+        const cardBody = document.getElementById('cardBody');
+        const warnaTitle = document.getElementById('warnaTitle');
+        const warnaListContainer = document.getElementById('warnaListContainer');
+        const simpanBtn = document.getElementById('simpanBtn');
+        const modal = document.getElementById('colorModal');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const selectBtn = document.getElementById('selectBtn');
+        const colorPicker = document.getElementById('colorPicker');
+        const colorGrid = document.getElementById('colorGrid');
+        const colors = [
+            '#ff4444', '#ffaa44', '#ffff44', '#88ff44', '#44ccff', 
+            '#cc88ff', '#ffccaa', '#999999', '#ffffff',
+            '#ff0000', '#ff8800', '#ffff00', '#00ff00', '#0088ff', 
+            '#6600ff', '#ff8844', '#888888', '#ffffff',
+            '#cc0000', '#cc6600', '#cccc00', '#00cc00', '#0066cc', 
+            '#6600cc', '#cc6644', '#666666', '#ffffff',
+            '#000000', '#333333', '#666666', '#999999', '#cccccc', 
+            '#ffffff', '#ffffff', '#ffffff', '#ffffff'
+        ];
+        function updateSeluruhWarna() {
+            mainBody.style.backgroundColor = bgColor;
+            document.documentElement.style.setProperty('--text-color', textColor);
+            
+            const semuaWarnaNumber = document.querySelectorAll('.warna-number');
+            const semuaWarnaText = document.querySelectorAll('.warna-text');
+            const warnaTitle = document.getElementById('warnaTitle');
+            const warnaList = document.querySelector('.warna-list');
+            
+            semuaWarnaNumber.forEach(el => el.style.color = textColor);
+            semuaWarnaText.forEach(el => el.style.color = textColor);
+            if (warnaTitle) {
+                warnaTitle.style.color = textColor;
+            }
+        }
+        function renderWarnaList() {
+            if (isSaved) {
+                warnaListContainer.innerHTML = `
+                    <div class="warna-item with-checkbox">
+                        <input type="checkbox" class="warna-checkbox" id="bgCheckbox" checked>
+                        <span class="warna-number">1.</span>
+                        <span class="warna-text">Warna latarbelakang</span>
+                        <div class="color-square" id="bgColorSquare" style="background-color: ${bgColor}; border-color: white;"></div>
+                    </div>
+                    <div class="warna-item with-checkbox">
+                        <input type="checkbox" class="warna-checkbox" id="textCheckbox" checked>
+                        <span class="warna-number">2.</span>
+                        <span class="warna-text">Warna teks</span>
+                        <div class="color-square" id="textColorSquare" style="background-color: ${textColor}; border-color: white;"></div>
+                    </div>
+                `;
+                document.getElementById('bgCheckbox').addEventListener('change', function(e) {
+                    if (e.target.checked) {
+                        mainBody.style.backgroundColor = bgColor;
+                    } else {
+                        mainBody.style.backgroundColor = '#ffffff';
+                    }
+                });
+                
+                document.getElementById('textCheckbox').addEventListener('change', function(e) {
+                    const semuaWarnaNumber = document.querySelectorAll('.warna-number');
+                    const semuaWarnaText = document.querySelectorAll('.warna-text');
+                    const warnaTitle = document.getElementById('warnaTitle');
+                    const warnaList = document.querySelector('.warna-list');
+                    
+                    if (e.target.checked) {
+                        semuaWarnaNumber.forEach(el => el.style.color = textColor);
+                        semuaWarnaText.forEach(el => el.style.color = textColor);
+                        if (warnaTitle) warnaTitle.style.color = textColor;
+                        document.documentElement.style.setProperty('--text-color', textColor);
+                    } else {
+                        semuaWarnaNumber.forEach(el => el.style.color = '#000000');
+                        semuaWarnaText.forEach(el => el.style.color = '#000000');
+                        if (warnaTitle) warnaTitle.style.color = '#000000';
+                        document.documentElement.style.setProperty('--text-color', '#5a8ccf');
+                    }
+                });
+            } else {
+                warnaListContainer.innerHTML = `
+                    <div class="warna-item">
+                        <span class="warna-number">1.</span>
+                        <span class="warna-text">Warna latarbelakang</span>
+                        <div class="color-square" id="bgColorSquare" style="background-color: ${bgColor}; border-color: white;"></div>
+                    </div>
+                    <div class="warna-item">
+                        <span class="warna-number">2.</span>
+                        <span class="warna-text">Warna teks</span>
+                        <div class="color-square" id="textColorSquare" style="background-color: ${textColor}; border-color: white;"></div>
+                    </div>
+                `;
+            }
+            document.getElementById('bgColorSquare').addEventListener('click', function() {
+                activeType = 'bg';
+                openModal();
+            });
+            
+            document.getElementById('textColorSquare').addEventListener('click', function() {
+                activeType = 'text';
+                openModal();
+            });
+        }
+        function openModal() {
+            colorGrid.innerHTML = '';
+            colors.forEach((color, index) => {
+                const colorDiv = document.createElement('div');
+                colorDiv.className = 'color-option';
+                colorDiv.style.backgroundColor = color;
+                colorDiv.addEventListener('click', function() {
+                    colorPicker.value = color;
+                    document.querySelectorAll('.color-option.selected').forEach(el => {
+                        el.classList.remove('selected');
+                    });
+                    colorDiv.classList.add('selected');
+                });
+                colorGrid.appendChild(colorDiv);
+            });
+            
+            if (activeType === 'bg') {
+                colorPicker.value = bgColor;
+            } else {
+                colorPicker.value = textColor;
+            }
+            
+            modal.classList.add('show');
+        }
+        function closeModal() {
+            modal.classList.remove('show');
+        }
+        cancelBtn.addEventListener('click', function() {
+            closeModal();
+        });
+        selectBtn.addEventListener('click', function() {
+            const selectedColor = colorPicker.value;
+            if (activeType === 'bg') {
+                bgColor = selectedColor;
+            } else {
+                textColor = selectedColor;
+            }
+            const bgSquare = document.getElementById('bgColorSquare');
+            const textSquare = document.getElementById('textColorSquare');
+            
+            if (bgSquare) bgSquare.style.backgroundColor = bgColor;
+            if (textSquare) textSquare.style.backgroundColor = textColor;
+            
+            if (isSaved) {
+                updateSeluruhWarna();
+            }
+            
+            closeModal();
+        });
+        simpanBtn.addEventListener('click', function() {
+            isSaved = true;
+            renderWarnaList();
+            updateSeluruhWarna();
+            simpanBtn.style.backgroundColor = '#27ae60';
+            simpanBtn.textContent = '✓ Tersimpan';
+            
+            setTimeout(() => {
+                simpanBtn.style.backgroundColor = '#6b7280';
+                simpanBtn.textContent = 'Simpan';
+            }, 2000);
+        });
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('show')) {
+                closeModal();
+            }
+        });
+        renderWarnaList();
+    </script>
+</body>
+</html>
