@@ -42,17 +42,19 @@
         let textColor = '#000000';
         let isSaved = false;
         let activeType = 'bg';
-        const mainBody = document.getElementById('mainBody');
-        const mainCard = document.getElementById('mainCard');
-        const cardBody = document.getElementById('cardBody');
-        const warnaTitle = document.getElementById('warnaTitle');
-        const warnaListContainer = document.getElementById('warnaListContainer');
-        const simpanBtn = document.getElementById('simpanBtn');
-        const modal = document.getElementById('colorModal');
-        const cancelBtn = document.getElementById('cancelBtn');
-        const selectBtn = document.getElementById('selectBtn');
-        const colorPicker = document.getElementById('colorPicker');
-        const colorGrid = document.getElementById('colorGrid');
+        
+        const DOM = {
+            body: document.getElementById('mainBody'),
+            container: document.getElementById('warnaListContainer'),
+            modal: document.getElementById('colorModal'),
+            colorGrid: document.getElementById('colorGrid'),
+            colorPicker: document.getElementById('colorPicker'),
+            simpanBtn: document.getElementById('simpanBtn'),
+            cancelBtn: document.getElementById('cancelBtn'),
+            selectBtn: document.getElementById('selectBtn'),
+            warnaTitle: document.getElementById('warnaTitle')
+        };
+        
         const colors = [
             '#ff4444', '#ffaa44', '#ffff44', '#88ff44', '#44ccff', 
             '#cc88ff', '#ffccaa', '#999999', '#ffffff',
@@ -63,159 +65,104 @@
             '#000000', '#333333', '#666666', '#999999', '#cccccc', 
             '#ffffff', '#ffffff', '#ffffff', '#ffffff'
         ];
-        function updateSeluruhWarna() {
-            mainBody.style.backgroundColor = bgColor;
+
+        function applyColors() {
+            DOM.body.style.backgroundColor = bgColor;
             document.documentElement.style.setProperty('--text-color', textColor);
-            
-            const semuaWarnaNumber = document.querySelectorAll('.warna-number');
-            const semuaWarnaText = document.querySelectorAll('.warna-text');
-            const warnaTitle = document.getElementById('warnaTitle');
-            const warnaList = document.querySelector('.warna-list');
-            
-            semuaWarnaNumber.forEach(el => el.style.color = textColor);
-            semuaWarnaText.forEach(el => el.style.color = textColor);
-            if (warnaTitle) {
-                warnaTitle.style.color = textColor;
-            }
+            document.querySelectorAll('.warna-number, .warna-text').forEach(el => {
+                el.style.color = textColor;
+            });
+            if (DOM.warnaTitle) DOM.warnaTitle.style.color = textColor;
         }
-        function renderWarnaList() {
+
+        function renderColors() {
+            const warnaHTML = (type, number, label, color, id) => `
+                <div class="warna-item ${isSaved ? 'with-checkbox' : ''}">
+                    ${isSaved ? `<input type="checkbox" class="warna-checkbox" id="${id}Checkbox" checked>` : ''}
+                    <span class="warna-number">${number}.</span>
+                    <span class="warna-text">${label}</span>
+                    <div class="color-square" id="${id}ColorSquare" style="background-color: ${color}; border-color: white;"></div>
+                </div>
+            `;
+
+            DOM.container.innerHTML = warnaHTML('bg', 1, 'Warna latarbelakang', bgColor, 'bg') + 
+                                      warnaHTML('text', 2, 'Warna teks', textColor, 'text');
+
+            document.getElementById('bgColorSquare').onclick = () => { activeType = 'bg'; openModal(); };
+            document.getElementById('textColorSquare').onclick = () => { activeType = 'text'; openModal(); };
+
             if (isSaved) {
-                warnaListContainer.innerHTML = `
-                    <div class="warna-item with-checkbox">
-                        <input type="checkbox" class="warna-checkbox" id="bgCheckbox" checked>
-                        <span class="warna-number">1.</span>
-                        <span class="warna-text">Warna latarbelakang</span>
-                        <div class="color-square" id="bgColorSquare" style="background-color: ${bgColor}; border-color: white;"></div>
-                    </div>
-                    <div class="warna-item with-checkbox">
-                        <input type="checkbox" class="warna-checkbox" id="textCheckbox" checked>
-                        <span class="warna-number">2.</span>
-                        <span class="warna-text">Warna teks</span>
-                        <div class="color-square" id="textColorSquare" style="background-color: ${textColor}; border-color: white;"></div>
-                    </div>
-                `;
-                document.getElementById('bgCheckbox').addEventListener('change', function(e) {
-                    if (e.target.checked) {
-                        mainBody.style.backgroundColor = bgColor;
-                    } else {
-                        mainBody.style.backgroundColor = '#ffffff';
-                    }
-                });
-                
-                document.getElementById('textCheckbox').addEventListener('change', function(e) {
-                    const semuaWarnaNumber = document.querySelectorAll('.warna-number');
-                    const semuaWarnaText = document.querySelectorAll('.warna-text');
-                    const warnaTitle = document.getElementById('warnaTitle');
-                    const warnaList = document.querySelector('.warna-list');
-                    
-                    if (e.target.checked) {
-                        semuaWarnaNumber.forEach(el => el.style.color = textColor);
-                        semuaWarnaText.forEach(el => el.style.color = textColor);
-                        if (warnaTitle) warnaTitle.style.color = textColor;
-                        document.documentElement.style.setProperty('--text-color', textColor);
-                    } else {
-                        semuaWarnaNumber.forEach(el => el.style.color = '#000000');
-                        semuaWarnaText.forEach(el => el.style.color = '#000000');
-                        if (warnaTitle) warnaTitle.style.color = '#000000';
-                        document.documentElement.style.setProperty('--text-color', '#5a8ccf');
-                    }
-                });
-            } else {
-                warnaListContainer.innerHTML = `
-                    <div class="warna-item">
-                        <span class="warna-number">1.</span>
-                        <span class="warna-text">Warna latarbelakang</span>
-                        <div class="color-square" id="bgColorSquare" style="background-color: ${bgColor}; border-color: white;"></div>
-                    </div>
-                    <div class="warna-item">
-                        <span class="warna-number">2.</span>
-                        <span class="warna-text">Warna teks</span>
-                        <div class="color-square" id="textColorSquare" style="background-color: ${textColor}; border-color: white;"></div>
-                    </div>
-                `;
-            }
-            document.getElementById('bgColorSquare').addEventListener('click', function() {
-                activeType = 'bg';
-                openModal();
-            });
-            
-            document.getElementById('textColorSquare').addEventListener('click', function() {
-                activeType = 'text';
-                openModal();
-            });
-        }
-        function openModal() {
-            colorGrid.innerHTML = '';
-            colors.forEach((color, index) => {
-                const colorDiv = document.createElement('div');
-                colorDiv.className = 'color-option';
-                colorDiv.style.backgroundColor = color;
-                colorDiv.addEventListener('click', function() {
-                    colorPicker.value = color;
-                    document.querySelectorAll('.color-option.selected').forEach(el => {
-                        el.classList.remove('selected');
+                document.getElementById('bgCheckbox').onchange = (e) => {
+                    DOM.body.style.backgroundColor = e.target.checked ? bgColor : '#ffffff';
+                };
+                document.getElementById('textCheckbox').onchange = (e) => {
+                    const color = e.target.checked ? textColor : '#000000';
+                    document.querySelectorAll('.warna-number, .warna-text').forEach(el => {
+                        el.style.color = color;
                     });
-                    colorDiv.classList.add('selected');
-                });
-                colorGrid.appendChild(colorDiv);
+                    if (DOM.warnaTitle) DOM.warnaTitle.style.color = color;
+                };
+            }
+        }
+
+        function openModal() {
+            DOM.colorGrid.innerHTML = colors.map(color => 
+                `<div class="color-option" data-color="${color}" style="background-color: ${color}"></div>`
+            ).join('');
+            
+            const currentColor = activeType === 'bg' ? bgColor : textColor;
+            DOM.colorPicker.value = currentColor;
+            
+            document.querySelectorAll('.color-option').forEach(el => {
+                const color = el.getAttribute('data-color');
+                if (color === currentColor) el.classList.add('selected');
+                
+                el.onclick = () => {
+                    DOM.colorPicker.value = color;
+                    document.querySelectorAll('.color-option.selected').forEach(s => s.classList.remove('selected'));
+                    el.classList.add('selected');
+                };
             });
             
-            if (activeType === 'bg') {
-                colorPicker.value = bgColor;
-            } else {
-                colorPicker.value = textColor;
-            }
+            DOM.colorPicker.onchange = () => {
+                document.querySelectorAll('.color-option.selected').forEach(s => s.classList.remove('selected'));
+            };
             
-            modal.classList.add('show');
+            DOM.modal.classList.add('show');
         }
+
         function closeModal() {
-            modal.classList.remove('show');
+            DOM.modal.classList.remove('show');
         }
-        cancelBtn.addEventListener('click', function() {
-            closeModal();
-        });
-        selectBtn.addEventListener('click', function() {
-            const selectedColor = colorPicker.value;
-            if (activeType === 'bg') {
-                bgColor = selectedColor;
-            } else {
-                textColor = selectedColor;
-            }
+
+        function updateSquarePreview() {
             const bgSquare = document.getElementById('bgColorSquare');
             const textSquare = document.getElementById('textColorSquare');
-            
             if (bgSquare) bgSquare.style.backgroundColor = bgColor;
             if (textSquare) textSquare.style.backgroundColor = textColor;
-            
-            if (isSaved) {
-                updateSeluruhWarna();
-            }
-            
+        }
+
+        DOM.cancelBtn.onclick = closeModal;
+        DOM.selectBtn.onclick = () => {
+            activeType === 'bg' ? bgColor = DOM.colorPicker.value : textColor = DOM.colorPicker.value;
+            updateSquarePreview();
             closeModal();
-        });
-        simpanBtn.addEventListener('click', function() {
+        };
+        DOM.simpanBtn.onclick = () => {
             isSaved = true;
-            renderWarnaList();
-            updateSeluruhWarna();
-            simpanBtn.style.backgroundColor = '#27ae60';
-            simpanBtn.textContent = '✓ Tersimpan';
-            
+            renderColors();
+            applyColors();
+            DOM.simpanBtn.style.backgroundColor = '#27ae60';
+            DOM.simpanBtn.textContent = '✓ Tersimpan';
             setTimeout(() => {
-                simpanBtn.style.backgroundColor = '#6b7280';
-                simpanBtn.textContent = 'Simpan';
+                DOM.simpanBtn.style.backgroundColor = '#6b7280';
+                DOM.simpanBtn.textContent = 'Simpan';
             }, 2000);
-        });
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                closeModal();
-            }
-        });
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && modal.classList.contains('show')) {
-                closeModal();
-            }
-        });
-        renderWarnaList();
+        };
+        DOM.modal.onclick = (e) => e.target === DOM.modal && closeModal();
+        document.onkeydown = (e) => e.key === 'Escape' && DOM.modal.classList.contains('show') && closeModal();
+
+        renderColors();
     </script>
 </body>
 </html>

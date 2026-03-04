@@ -5,66 +5,48 @@
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, sans-serif;
     background-color: #2c5fa3;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    transition: background-color 0.3s, color 0.3s;
     padding: 20px;
-    --text-color: #ff5555;
+    --text-color: #000;
 }
 
 .card {
-    width: 850px;
+    width: 600px;
     background-color: transparent;
-    transition: background-color 0.3s, color 0.3s;
 }
 
 .card-header {
-    background-color: transparent;
-    padding: 25px 30px;
+    padding: 20px;
 }
 
 .card-header h1 {
-    color: #ff3333;
-    font-size: 34px;
-    font-weight: bold;
-    margin: 0;
+    color: #333;
+    font-size: 28px;
 }
 
 .card-body {
-    padding: 20px 25px 20px 25px;
-    background-color: transparent;
-    transition: background-color 0.3s, color 0.3s;
-    display: flex;
-    flex-direction: column;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
 }
 
 .warna-title {
     font-weight: bold;
     font-size: 14px;
     margin-bottom: 12px;
-    color: #ff5555;
-    transition: color 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.warna-title::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background-color: var(--text-color);
+    color: var(--text-color);
 }
 
 .warna-list {
-    border: 2px solid #5a8ccf;
-    padding: 12px 15px;
-    margin-bottom: 8px;
-    background-color: transparent;
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #f9f9f9;
 }
 
 .warna-item {
@@ -78,15 +60,9 @@ body {
     margin-bottom: 0;
 }
 
-.warna-item.with-checkbox {
-    display: flex;
-    align-items: center;
-}
-
 .warna-number {
     font-size: 14px;
-    color: #ff5555;
-    transition: color 0.3s;
+    color: var(--text-color);
     font-weight: 600;
     min-width: 20px;
 }
@@ -94,8 +70,7 @@ body {
 .warna-text {
     margin-left: 8px;
     font-size: 14px;
-    color: #ff5555;
-    transition: color 0.3s;
+    color: var(--text-color);
     font-weight: 600;
     flex: 1;
 }
@@ -108,29 +83,25 @@ body {
 }
 
 .color-square {
-    width: 28px;
-    height: 28px;
-    border: 2px solid white;
+    width: 30px;
+    height: 30px;
+    border: 2px solid #333;
     margin-left: auto;
     cursor: pointer;
-    transition: border-color 0.3s;
 }
 
 .btn-simpan {
-    background-color: #777777;
+    background-color: #6b7280;
     color: white;
     border: none;
-    padding: 7px 22px;
+    padding: 8px 20px;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    margin-top: 8px;
-    transition: background-color 0.3s;
-    align-self: flex-start;
 }
 
 .btn-simpan:hover {
-    background-color: #666666;
+    background-color: #555;
 }
 
 .modal {
@@ -151,55 +122,41 @@ body {
 }
 
 .modal-content {
-    background-color: #333;
-    width: 500px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+    width: 450px;
     padding: 20px;
-    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 .modal-header {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-    position: relative;
+    margin-bottom: 15px;
 }
 
 .modal-header h2 {
-    color: white;
-    font-size: 18px;
+    color: #333;
+    font-size: 16px;
     margin: 0;
 }
 
-.modal-header .btn-cancel {
-    position: absolute;
-    left: 0;
-}
-
-.modal-header .btn-select {
-    position: absolute;
-    right: 0;
-}
-
 .modal-btn {
-    padding: 8px 16px;
-    font-size: 16px;
+    padding: 6px 14px;
+    font-size: 13px;
     font-weight: bold;
     border: none;
     cursor: pointer;
-    color: white;
 }
 
 .btn-cancel {
-    background-color: #555555;
-    font-size: 14px;
-    padding: 6px 12px;
+    background-color: #999;
+    color: white;
 }
 
 .btn-select {
-    background-color: #2ecc71;
+    background-color: #27ae60;
+    color: white;
 }
 
 .color-grid {
@@ -210,43 +167,31 @@ body {
 }
 
 .color-option {
-    width: 40px;
-    height: 40px;
-    border: 2px solid #555;
+    width: 35px;
+    height: 35px;
+    border: 2px solid #999;
     cursor: pointer;
-    transition: all 0.2s;
-    border-radius: 3px;
-}
-
-.color-option:hover {
-    transform: scale(1.1);
-    border-color: white;
 }
 
 .color-option.selected {
-    border: 3px solid #00ff00;
+    border: 3px solid #000;
 }
 
 .custom-section {
     text-align: center;
-    font-size: 14px;
-    color: #999;
-    margin: 15px 0 10px 0;
-    font-weight: bold;
+    font-size: 12px;
+    color: #666;
+    margin: 10px 0;
 }
 
 .color-input-wrapper {
     display: flex;
-    gap: 10px;
-    align-items: center;
     justify-content: center;
-    margin-bottom: 15px;
 }
 
 .color-input-wrapper input[type="color"] {
     width: 50px;
     height: 50px;
-    border: none;
+    border: 1px solid #ccc;
     cursor: pointer;
-    border-radius: 3px;
 }
